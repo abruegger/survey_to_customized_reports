@@ -1,0 +1,946 @@
+---
+###################################################################################
+# This is the template that provides the structure, fixed and varying text elements
+###################################################################################
+
+# make title bold and specify space between logo and title
+title: |
+  | \vspace{1.2cm} **Open Science and Transparency Summary**
+subtitle: "Document created: `r Sys.Date()`"
+
+# list all variables that are required to populate the placeholders
+params:
+  ID_anonymous: ""
+  date_ended_key_data: ""
+  title: ""
+  paper_collection: ""
+  name_collection: ""
+  article_type: ""
+  replication: ""
+  rr: ""
+  empirical: ""
+  data_collected: ""
+  ethics_approval: ""
+  ethics_complied : ""
+  ethics_comments: ""
+  max_date: ""
+  last_part_submitted: ""
+  rr_st1_data_type: ""
+  rr_st1_data_collected: ""
+  rr_st1_examined: ""
+  rr_st1_examined_explain: ""
+  rr_st1_timeline: ""
+  rr_st1_explain: ""
+  rr_st1_sharing: ""
+  rr_st1_protocol: ""
+  rr_st1_meth_comment: ""
+  rr_st2_data: ""
+  rr_st2_primary: ""
+  rr_st2_secondary: ""
+  rr_st2_explain: ""
+  os_prereg: ""
+  os_prereg_theory: ""
+  os_prereg_hypotheses:  ""
+  os_prereg_design: ""
+  os_prereg_meth_mat: ""
+  os_prereg_analysis: ""    
+  os_prereg_interpretation: ""
+  os_prereg_when: ""
+  os_prereg_url: ""
+  os_prereg_describe: ""
+  os_prereg_other: ""
+  os_prereg_other_explain: ""
+  os_prereg_analyses_all: ""
+  os_prereg_analyses_details: ""
+  os_prereg_changes: ""
+  os_prereg_changes_ms: ""
+  os_prereg_expl_conf: ""
+  os_prereg_comment: ""
+  os_cited: ""
+  os_cited_explain: ""
+  os_doi: ""
+  os_doi_explain: ""
+  os_meth_design: ""
+  os_meth_measures: ""
+  os_meth: ""
+  os_meth_other: ""
+  os_meth_exemption: ""
+  os_other_standard: ""
+  os_meth_comment: ""
+  os_quant_sample: ""
+  os_quant_exclusions: ""
+  os_quant_exclusions_n: ""
+  os_quant_exclusions_criteria: ""
+  os_quant_ivs: ""
+  os_quant_dvs: ""
+  os_quant_reliability: ""
+  os_quant_descriptives: ""
+  os_quant_inferential_stats: ""
+  os_qual_context: ""
+  os_qual_recruitment: ""
+  os_qual_saturation: ""
+  os_qual_data_collection: ""
+  os_qual_recording: ""
+  os_qual_analysis: ""
+  os_qual_grounded: ""
+  os_mixed_definition_type: ""
+  os_mixed_rationale_mixed: ""
+  os_mixed_separte_sections: ""
+  os_mixed_integration: ""
+  os_mixed_sequence: ""
+  os_data_type: ""
+  os_data_type_describe: ""
+  os_data_public: ""
+  os_data_url: ""
+  os_data_complete: ""
+  os_data_codebook: ""
+  os_data_explain: ""
+  os_data_codebook_explain: ""
+  os_data_procedures: ""
+  os_code: ""
+  os_code_url: ""
+  os_code_explain: ""
+  os_materials: ""
+  os_materials_url: ""
+  os_materials_explain: ""
+  os_steps: ""
+  os_partial_subset: ""
+  os_protected_sharing: ""
+  os_data_comment: ""
+  div_sample_justification: ""
+  div_justification_explain: ""
+  div_sample_description: ""
+  div_description_explain: ""
+  div_discussion: ""
+  div_discussion_explain: ""
+  div_citations: ""
+  div_citations_explain: ""
+  
+fontsize: 10pt
+mainfont: Inter # this is a google font, maybe necessary to download first if code is used locally
+header-includes:
+  - \usepackage{titling} # for customising title
+  - \pretitle{\begin{flushleft}
+    \includegraphics[width=7.2cm,height=7.2cm]{logo.png}\LARGE\\} # size of logo
+  - \posttitle{\end{flushleft}}
+  - \usepackage{titling}\setlength{\droptitle}{-1.5cm} # move logo further up
+  - \usepackage{lastpage} # to capture last page number
+  - \usepackage{fancyhdr} # to format footer with page number
+  - \usepackage{longtable}\setlength{\LTleft}{0.5em}
+  - \raggedbottom
+  - \usepackage{setspace}
+  - \usepackage{color}
+  - \usepackage{colortbl}\arrayrulecolor{white}
+  - \usepackage{booktabs}
+  - \usepackage{array} # for extended column definitions  
+  
+output: 
+   pdf_document:
+      latex_engine: xelatex
+      extra_dependencies: xcolor
+---
+
+<!-- reduce distance between title and text -->
+\vspace{-20truemm}
+
+<!-- Define Footer -->
+<!-- Remove default footer and head -->
+\fancyfoot{} 
+\fancyhead{}
+\fancypagestyle{plain}{%
+\renewcommand{\headrulewidth}{0pt}%
+\fancyfoot[R]{\footnotesize Page \thepage\, of\, \pageref*{LastPage}}
+}
+\pagestyle{plain}
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# load required packages
+library(knitr)
+library(flextable)
+library(showtext)
+library(tidyverse)
+
+options(knitr.table.format = "latex") 
+
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  fig.showtext = TRUE
+)
+```
+
+# Manuscript Overview
+
+```{r basics, ft.align="left"}
+
+# Create and plot table
+# Create a table that has descriptions / variable names on the left and content / answers on the right 
+basics <- tibble(rubric = c("Manuscript Title", 
+                            "Article type",
+                            "Submission Form ID", 
+                            "First submitted",
+                            "Special Issue (if any)",
+                            "Presents empirical data",
+                            "Type of data used", 
+                            "Manuscript has an ethics statement",
+                            "Approved by ethics committee",
+                            "  Comments about ethics",
+                            "Registered report", 
+                            "Replication",
+                            "Pre-registered",
+                            "Submission form completed up to"), 
+                 
+                 content = c(params$title, 
+                             params$article_type,
+                             params$ID_anonymous,
+                             params$date_ended_key_data,
+                             params$name_collection,
+                             params$empirical,
+                             params$os_data_type,
+                             params$ethics_complied,
+                             params$ethics_approval,
+                             params$ethics_comments,
+                             params$rr,
+                             params$replication,
+                             params$os_prereg, 
+                             params$last_part_submitted))
+
+# pass content to a table and format it
+ft <- flextable(basics) %>% 
+  italic(part = "all", j = 1) %>% 
+  bold(i = 1:2, j =1:2) %>% 
+  fontsize(size = 11) %>% 
+  delete_part(part = "header") %>% 
+  border_remove() %>% 
+  width(width = c(9,8),unit = "cm") %>%  # column width 1 and 2
+  set_table_properties(layout = "fixed") %>% 
+  theme_zebra()
+
+
+# highlight problematic items
+problematic <- basics %>%
+  # to avoid highlighting content that is not problematic, 
+  # define content that should never occur: "xyz" (could be anything that is unlikely to be observed)
+  add_column(problematic = c("xyz","xzy","xyz","xyz","xyz",
+                             "xyz","xyz","no","no","xyz",
+                             "xyz","xyz","xyz","xyz")) %>% 
+  mutate(red =  case_when(
+    content == problematic ~ "highlight",
+    TRUE ~ "not highlight")) %>%
+  mutate(bold =  case_when(
+    content == problematic ~ "highlight",
+    TRUE ~ "not highlight")) %>% 
+  mutate(background =  case_when(
+    content == problematic ~ "highlight",
+    TRUE ~ "not highlight"))
+
+# red font if problematic
+colormatrix <- ifelse(problematic$red == "highlight", "red", "black")
+ft <- ft %>%
+  color(j = 2, color=colormatrix)
+
+# bold font if problematic
+colormatrix_bold <- ifelse(problematic$bold == "highlight", TRUE, FALSE)
+ft <- ft %>%
+  bold(j = 2, bold=colormatrix_bold)
+
+# yellow background if problematic
+colormatrix_background <- ifelse(problematic$background == "highlight", "#FFFF00", NA) # yellow if not ideal, not colour applied if okay (NA)
+ft <- ft %>%
+  highlight(j = 2, color = colormatrix_background)
+
+
+# print table
+ft
+```
+
+
+
+```{r registered report, ft.align="left", eval= (params$rr == "yes")}
+asis_output("# Registered Report\n") # Conditional section header
+asis_output("## Stage 1\n") # Conditional section header
+
+stage1_data <- tibble(
+  # ITEM CONTENTS / Rubric
+  rubric = c("Type of data",
+             "Data already collected",
+             "Data already explored / analysed",
+             "  How / in what way?",
+             "Timeline for completing the study",
+             "  Why longer than 9 months?",
+             "Agree to share all data, digital materials,code",
+             "Agree to register protocol",
+             "Comments"), 
+  
+  # ITEM NAMES
+  content = c(params$rr_st1_data_type,
+              params$rr_st1_data_collected,
+              params$rr_st1_examined,
+              params$rr_st1_examined_explain,
+              params$rr_st1_timeline,
+              params$rr_st1_explain,
+              params$rr_st1_sharing,
+              params$rr_st1_protocol,
+              params$rr_st1_meth_comment)
+)
+
+ft <- flextable(stage1_data) %>% 
+  italic(part = "all", j = 1) %>% 
+  fontsize(size = 10) %>% 
+  delete_part(part = "header") %>% 
+  border_remove() %>% 
+  width(width = c(11,6),unit = "cm") %>%  # column width 1 and 2
+  theme_zebra() %>% 
+  set_table_properties(layout = "fixed")
+
+problematic <- stage1_data %>%
+  # to avoid highlighting content that is not problematic, 
+  # define content that should not be observed "xyz"
+  add_column(problematic = c("xyz","yes","yes","xyz","xyz","xyz","no","no","xyz")) %>% 
+  mutate(red =  case_when(
+    content == problematic ~ "highlight",
+    TRUE ~ "not highlight")) %>%
+  mutate(bold =  case_when(
+    content == problematic ~ "highlight",
+    TRUE ~ "not highlight")) %>% 
+  mutate(background =  case_when(
+    content == problematic ~ "highlight",
+    TRUE ~ "not highlight"))
+
+# red font if problematic
+colormatrix <- ifelse(problematic$red == "highlight", "red", "black")
+ft <- ft %>%
+  color(j = 2, color=colormatrix)
+
+# bold font if problematic
+colormatrix_bold <- ifelse(problematic$bold == "highlight", TRUE, FALSE)
+ft <- ft %>%
+  bold(j = 2, bold=colormatrix_bold)
+
+# yellow background if problematic
+# yellow if not ideal, not colour applied if okay (NA)
+colormatrix_background <- ifelse(problematic$background == "highlight", "#FFFF00", NA) 
+ft <- ft %>%
+  highlight(j = 2, color = colormatrix_background)
+
+# print table
+ft
+```
+
+
+
+
+```{r titletransopen, ft.align="left", eval= (params$empirical == "yes" & params$last_part_submitted == "Diversity")}
+# This title is shown if article includes empirical data and was completed. 
+# Not shown for Stage 1 submissions or perspectives without data.
+asis_output("# Transparency and Openness\n") # Conditional section header
+```
+
+
+```{r prereg, ft.align="left", eval= (params$os_prereg == "yes" & params$last_part_submitted == "Diversity")}
+# The following code is only executed if there was a preregistration
+asis_output("## Pre-registration Details\n") # Conditional section header
+
+
+# Create and plot table
+prereg_data <- tibble(rubric = c("Location of pre-registration (URL)",
+                                 "Content of Pre-Registration / Study Protocol (if Registered Report):",
+                                 "  Theory",
+                                 "  Hypotheses",
+                                 "  Design",
+                                 "  Methods Materials", 
+                                 "  Data Analyses",
+                                 "  Guidelines for the Interpretation of Findings",
+                                 "If analyses (in addition to hypotheses) were pre-registered:",
+                                 "  Pre-registration / study protocol fully describes intended analyses", 
+                                 "  Manuscript reports all pre-registered analyses", 
+                                 "Timing",
+                                 "  At another time:",
+                                 "Additional pre-reg. other than the one reported",
+                                 "  Explanation",
+                                 "Any changes to pre-registration / study protocol",
+                                 "  Manuscript fully describes these changes",
+                                 "Clear distinction pre-registered vs. not pre-registered analyses",
+                                 "Comments about pre-registration / study protocol"), 
+                      
+                      content = c(params$os_prereg_url,
+                                  "",
+                                  params$os_prereg_theory,
+                                  params$os_prereg_hypotheses,
+                                  params$os_prereg_design,
+                                  params$os_prereg_meth_mat,
+                                  params$os_prereg_analysis,
+                                  params$os_prereg_interpretation,
+                                  "",
+                                  params$os_prereg_analyses_details, 
+                                  params$os_prereg_analyses_all, 
+                                  params$os_prereg_when,
+                                  params$os_prereg_describe,
+                                  params$os_prereg_other,
+                                  params$os_prereg_other_explain,
+                                  params$os_prereg_changes,
+                                  params$os_prereg_changes_ms,
+                                  params$os_prereg_expl_conf,
+                                  params$os_prereg_comment)
+)
+
+
+ft <- flextable(prereg_data) %>% 
+  italic(part = "all", j = 1) %>% 
+  fontsize(size = 10) %>% 
+  delete_part(part = "header") %>% 
+  theme_zebra() %>% 
+  border_remove() 
+
+# add highlighting of problematic answers
+problematic <- prereg_data %>%
+  add_column(problematic = c("xyz","xyz","xyz","xyz","xyz",
+                             "xyz","xyz","xyz","xyz","no",
+                             "no","xyz","xyz","yes","xyz",
+                             "xyZ","no","no","xyz")) %>% # to avoid highlighting content that is not problematic, define content that should not be observed "xyz"
+  mutate(red =  case_when(
+    content == problematic ~ "highlight",
+    TRUE ~ "not highlight")) %>%
+  mutate(bold =  case_when(
+    content == problematic ~ "highlight",
+    TRUE ~ "not highlight")) %>% 
+  mutate(background =  case_when(
+    content == problematic ~ "highlight",
+    TRUE ~ "not highlight"))
+
+# red font if problematic
+colormatrix <- ifelse(problematic$red == "highlight", "red", "black")
+ft <- ft %>%
+  color(j = 2, color=colormatrix)
+
+# bold font if problematic
+colormatrix_bold <- ifelse(problematic$bold == "highlight", TRUE, FALSE)
+ft <- ft %>%
+  bold(j = 2, bold=colormatrix_bold)
+
+# yellow background if problematic
+colormatrix_background <- ifelse(problematic$background == "highlight", "#FFFF00", NA) # yellow if not ideal, not colour applied if okay (NA)
+ft <- ft %>%
+  highlight(j = 2, color = colormatrix_background)
+
+
+# highlight problematic aspects 
+# no easier way than spelling out all bad options
+# "highlight" not used because it ruins the text wrapping
+ft <- ft %>%
+  # highlight(i = ~ content == "after some data were collected, but before exploring the data", color = "#FFFF00", j = "content") %>%
+  color(i = ~ content == "after some data were collected, but before exploring the data", color = "#FF0000", j = "content") %>%
+  bold(i = ~ content == "after some data were collected, but before exploring the data",  j = "content") %>% 
+  
+  #  highlight(i = ~ content == "after all data were collected, but before exploring the data", color = "#FFFF00", j = "content") %>%
+  color(i = ~ content == "after all data were collected, but before exploring the data", color = "#FF0000", j = "content") %>%
+  bold(i = ~ content == "after all data were collected, but before exploring the data",  j = "content") %>% 
+  
+  # highlight(i = ~ content == "after exploring the data, but before any statistical analyses were conducted", color = "#FFFF00", j = "content") %>%
+  color(i = ~ content == "after exploring the data, but before any statistical analyses were conducted", color = "#FF0000", j = "content") %>%
+  bold(i = ~ content == "after exploring the data, but before any statistical analyses were conducted",  j = "content") %>% 
+  
+  # highlight(i = ~ content == "after some but not all statistical analyses were conducted", color = "#FFFF00", j = "content") %>%
+  color(i = ~ content == "after some but not all statistical analyses were conducted", color = "#FF0000", j = "content") %>% 
+  bold(i = ~ content == "after some but not all statistical analyses were conducted",  j = "content") %>%  
+  
+  # highlight(i = ~ content == "at another time", color = "#FFFF00", j = "content") %>%
+  color(i = ~ content == "at another time", color = "#FF0000", j = "content") %>% 
+  bold(i = ~ content == "at another time",  j = "content")
+
+# prepare layout
+ft <- ft %>% 
+  width(width = c(11,6),unit = "cm") %>%  # column width 1 and 2
+  set_table_properties(layout = "fixed") 
+
+# print table
+ft 
+
+```
+
+
+
+```{r reporting1, ft.align="left", eval= (params$empirical == "yes" & params$last_part_submitted == "Diversity")}
+# This section is only run if article includes empirical data and was completed. Not for Stage 1 submissions or perspectives without data.
+# The following code is only executed if the submission presents empirical data
+asis_output("## Reporting Standards\n") # Conditional section header
+
+asis_output("The following questions concern the principle of transparent and full reporting and thus should be implemented by each empirical study.")
+
+reporting_data <- tibble(
+  rubric = c(
+    "Questions Relevant for Most Types of Empirical Studies",
+    "Does the manuscript fully describe the study design, procedures, and materials to allow independent replication?",
+    "Does the manuscript fully describe the measures of interest (e.g., pro-environmental attitude) and their operationalizations (e.g., a questionnaire measuring pro-environmental attitude)?",
+    "What type of data and analysis does your submission present?",
+    "Other type of analysis (if applicable)",
+    "Other reporting standard used (if applicable)",
+    "If you believe your study should be exempted from a reporting requirement, please explain why",
+    "Other comments about your Methods, Results, or Discussion"
+  ),
+  content = c("",
+              params$os_meth_design,
+              params$os_meth_measures,
+              params$os_meth,       
+              params$os_meth_other, 
+              params$os_other_standard, 
+              params$os_meth_exemption,
+              params$os_meth_comment))
+
+
+ft <- flextable(reporting_data) %>% 
+  italic(part = "all", j = 1) %>% 
+  bold(i = 1, bold=TRUE, part = "all") %>% 
+  fontsize(size = 10) %>% 
+  delete_part(part = "header") %>% 
+  border_remove() %>% 
+  width(width = c(11,6),unit = "cm") %>%  
+  theme_zebra() %>% 
+  # highlight problematic aspects 
+  highlight(i = ~ content == "no", color = "#FFFF00", j = "content") %>% 
+  color(i = ~ content == "no", color = "#FF0000", j = "content") %>% 
+  bold(i = ~ content == "no",  j = "content") %>% 
+  highlight(i = ~ content == "N/A", color = "#FFFF00", j = "content") %>%
+  color(i = ~ content == "N/A", color = "#FF0000", j = "content") %>%
+  bold(i = ~ content == "N/A",  j = "content") %>%
+  set_table_properties(layout = "fixed") 
+ft
+
+```
+
+
+
+```{r reporting2, ft.align="left", eval= ((params$os_meth == "Quantitative data" | params$os_meth == "Mixed (quant. and qual.) data") & params$last_part_submitted == "Diversity")}
+# This section is only run if article includes empirical data and was completed. Not for Stage 1 submissions or perspectives without data.
+
+# quantitative table
+quant_data <- tibble(
+  rubric = c("Requirements for Quantitative Data","Does the manuscript fully describe the rationale for the sample size used?",
+             "Were any observations / participants / data excluded from the analyses?",
+             "  Does the manuscript report the total number of excluded observations?",
+             "  Does the manuscript report all data exclusion criteria?",
+             "Does the manuscript report all levels of all independent variables (e.g., experimental groups)?",
+             "Does the manuscript report all levels of all measures / dependent variables that were analysed for this article’s target research question?",
+             "Does the manuscript report estimates related to the reliability of measures (e.g., internal consistency, interrater reliability)?",
+             "Does the manuscript report basic descriptive statistics of all variables that are used in the analyses (n, mean, sd) for the total sample and for each subgroup (e.g., cells in experimental designs)?",
+             "Does the manuscript report all exact *p* values, effect sizes, and 95% CIs for inferential tests?"),
+  content = c("",params$os_quant_sample,
+              params$os_quant_exclusions,
+              params$os_quant_exclusions_n,
+              params$os_quant_exclusions_criteria,
+              params$os_quant_ivs,
+              params$os_quant_dvs,
+              params$os_quant_reliability,
+              params$os_quant_descriptives,
+              params$os_quant_inferential_stats
+  ))
+
+ft <- flextable(quant_data) %>% 
+  italic(part = "all", j = 1) %>% 
+  bold(i = 1, bold=TRUE, part = "all") %>% 
+  fontsize(size = 10) %>% 
+  delete_part(part = "header") %>% 
+  border_remove() %>% 
+  width(width = c(11,6),unit = "cm") %>%  
+  theme_zebra()
+
+# create column that defines which answers are ideal
+good_answer <- quant_data %>%
+  add_column(good_answer = c("","yes","no","yes","yes","yes","yes","yes","yes","yes")) %>%
+  mutate(red =  case_when(
+    content == good_answer ~ "not highlight",
+    TRUE ~ "highlight")) %>% 
+  mutate(bold =  case_when(
+    content == good_answer ~ "not highlight",
+    TRUE ~ "highlight")) %>% 
+  mutate(background =  case_when(
+    content == good_answer ~ "not highlight",
+    TRUE ~ "highlight"))
+
+# red font if not good answer
+colormatrix <- ifelse(good_answer$red == "highlight", "red", "black")
+ft <- ft %>% 
+  color(j = 2, color=colormatrix) 
+
+# bold font if not good answer
+colormatrix_bold <- ifelse(good_answer$bold == "highlight", TRUE, FALSE)
+ft <- ft %>% 
+  bold(j = 2, bold=colormatrix_bold)
+
+# yellow background if not good answer
+colormatrix_background <- ifelse(good_answer$background == "highlight", "#FFFF00", NA) # yellow if not ideal, not colour applied if fine (NA)
+ft <- ft %>% 
+  highlight(j = 2, color = colormatrix_background)
+
+ft
+
+```
+
+
+
+
+
+```{r reporting3, ft.align="left", eval= ((params$os_meth == "Qualitative data" | params$os_meth == "Mixed (quant. and qual.) data") & params$last_part_submitted == "Diversity")}
+# This section is only run if article includes empirical data and was completed. Not for Stage 1 submissions or perspectives without data.
+
+# add qualitative table
+qual_data <- tibble(
+  rubric = c("Requirements for Qualitative Data",
+             "Manuscript provides general context (e.g., when / wehre data were collected)", 
+             "Manuscript provides a rationale for recruiting and selecting participants",
+             "Manuscript describes the rationale for decision to halt data collection",
+             "Manuscript reports key details about the data collection process (e.g., form of data collection; duration)",
+             "Manuscript reports what data audio/visual recording methods, field notes, or transcription processes were used",
+             "Manuscript reports key details for the data analysis process (e.g., analytic process, coding strategy)",
+             "Manuscript demonstrate that findings are grounded in the evidence (e.g., using quotes or descriptions)"),
+  content = c("",
+              params$os_qual_context,
+              params$os_qual_recruitment,
+              params$os_qual_saturation,
+              params$os_qual_data_collection,
+              params$os_qual_recording,
+              params$os_qual_analysis,
+              params$os_qual_grounded))
+
+
+ft <- flextable(qual_data) %>% 
+  italic(part = "all", j = 1) %>% 
+  # make first row bold
+  bold(i = 1, bold=TRUE, part = "all") %>% 
+  fontsize(size = 10) %>% 
+  delete_part(part = "header") %>% 
+  border_remove() %>% 
+  width(width = c(11,6),unit = "cm") %>%  # column width 1 and 2
+  theme_zebra()
+
+# create column that defines which answers are ideal
+good_answer <- qual_data %>%
+  add_column(good_answer = c("","yes","yes","yes","yes","yes","yes","yes")) %>%
+  mutate(red =  case_when(
+    content == good_answer ~ "not highlight",
+    TRUE ~ "highlight")) %>% 
+  mutate(bold =  case_when(
+    content == good_answer ~ "not highlight",
+    TRUE ~ "highlight")) %>% 
+  mutate(background =  case_when(
+    content == good_answer ~ "not highlight",
+    TRUE ~ "highlight"))
+
+# red font if not good answer
+colormatrix <- ifelse(good_answer$red == "highlight", "red", "black")
+ft <- ft %>% 
+  color(j = 2, color=colormatrix) 
+
+# bold font if not good answer
+colormatrix_bold <- ifelse(good_answer$bold == "highlight", TRUE, FALSE)
+ft <- ft %>% 
+  bold(j = 2, bold=colormatrix_bold)
+
+# yellow background if not good answer
+colormatrix_background <- ifelse(good_answer$background == "highlight", "#FFFF00", NA) # yellow if not ideal, not colour applied if fine (NA)
+ft <- ft %>% 
+  highlight(j = 2, color = colormatrix_background)
+
+ft
+
+```
+
+
+```{r reporting4, ft.align="left", eval= (params$os_meth == "Mixed (quant. and qual.) data" & params$last_part_submitted == "Diversity")}
+# This section is only run if article includes empirical data and was completed. Not for Stage 1 submissions or perspectives without data.
+mixed_data <- tibble(
+  rubric = c("Additional Requirements for Mixed Data",
+             "Manuscript describes the type of mixed methods design (e.g., convergent design, explanatory sequential design) using a major reference in the field",
+             "Manuscript provides a rationale for the need to collect and integrate qualitative and quantitative data",
+             "Methods and Results sections devote separate sections to each analysis (quantitative, qualitative, mixed)",
+             "Result section indicates how the qualitative and quantitative results were integrated (e.g., discussion, graphs)",
+             "Methods & Results of the manuscript consistently mirror the type of mixed methods design in terms of sequence (i.e., if quantitative or qualitative  came first)"),
+  content = c("",
+              params$os_mixed_definition_type,
+              params$os_mixed_rationale_mixed,
+              params$os_mixed_separte_sections,
+              params$os_mixed_integration,
+              params$os_mixed_sequence))
+
+ft <- flextable(mixed_data) %>% 
+  italic(part = "all", j = 1) %>% 
+  # make first row bold
+  bold(i = 1, bold=TRUE, part = "all") %>% 
+  fontsize(size = 10) %>% 
+  delete_part(part = "header") %>% 
+  border_remove() %>% 
+  width(width = c(11,6),unit = "cm") %>%  # column width 1 and 2
+  theme_zebra()
+
+# create column that defines which answers are ideal
+good_answer <- mixed_data %>%
+  add_column(good_answer = c("","yes","yes","yes","yes","yes")) %>%
+  mutate(red =  case_when(
+    content == good_answer ~ "not highlight",
+    TRUE ~ "highlight")) %>% 
+  mutate(bold =  case_when(
+    content == good_answer ~ "not highlight",
+    TRUE ~ "highlight")) %>% 
+  mutate(background =  case_when(
+    content == good_answer ~ "not highlight",
+    TRUE ~ "highlight"))
+
+# red font if not good answer
+colormatrix <- ifelse(good_answer$red == "highlight", "red", "black")
+ft <- ft %>% 
+  color(j = 2, color=colormatrix) 
+
+# bold font if not good answer
+colormatrix_bold <- ifelse(good_answer$bold == "highlight", TRUE, FALSE)
+ft <- ft %>% 
+  bold(j = 2, bold=colormatrix_bold)
+
+# yellow background if not good answer
+colormatrix_background <- ifelse(good_answer$background == "highlight", "#FFFF00", NA) # yellow if not ideal, not colour applied if fine (NA)
+ft <- ft %>% 
+  highlight(j = 2, color = colormatrix_background)
+
+ft
+```
+
+
+
+
+
+
+
+
+
+```{r openresearch, ft.align="left", eval= (params$empirical == "yes" & params$last_part_submitted == "Diversity")}
+# This section is only run if article includes empirical data and was completed. Not for Stage 1 submissions or perspectives without data.
+# The following code is only executed if the submission presents empirical data
+asis_output("## Data, Code, and Materials Transparency\n") # Conditional section header
+
+asis_output("The following questions focus on the transparency of the data, methods, and materials involved in the research. The requested information and files should enable any researcher to replicating the research.")
+
+# quantitative table
+open_data <- tibble(
+  rubric = c("Open Data, Materials, and Code",
+             "Data used in your research", 
+             "  Other: ",
+             "Data publicly available", 
+             "  Where:", 
+             "  Why are the data not publicly available (repository)",
+             "  Are all variables, treatment conditions, and observations included that are described in the manuscript",
+             "  Codebook included (lists and describes all variables in the dataset incl. answer options)",
+             "  Why not documented in a codebook",
+             
+             "Fully described the procedures used to collect, preprocess, clean, or generate the data",
+             "All code and software publicly available",
+             "  Where:", 
+             "  Why not publicly available:",
+             "Instructions, stimuli, and test materials publicly available",
+             "  Where:",
+             "  Why not publicly available:",
+             "Steps others should follow to request access to data / materials not publicly shared",
+             "Possible to share a subset of the data, code, or other materials that cannot be publicly shared?",
+             "Possible to post data, code, or other materials that cannot be publicly shared into a protected access repository",
+             "Comments about your Data, Code, and Materials"),
+  content = c("",
+              params$os_data_type,
+              params$os_data_type_describe,
+              params$os_data_public,
+              params$os_data_url,
+              params$os_data_explain,
+              params$os_data_complete,
+              params$os_data_codebook,
+              params$os_data_codebook_explain,
+              params$os_data_procedures,
+              params$os_code,
+              params$os_code_url,
+              params$os_code_explain,
+              params$os_materials,
+              params$os_materials_url,
+              params$os_materials_explain,
+              params$os_steps,
+              params$os_partial_subset,
+              params$os_protected_sharing,
+              params$os_data_comment))
+
+ft <- flextable(open_data) %>% 
+  italic(part = "all", j = 1) %>% 
+  # make first row bold
+  bold(i = 1, bold=TRUE, part = "all") %>% 
+  fontsize(size = 10) %>% 
+  delete_part(part = "header") %>% 
+  border_remove() %>% 
+  width(width = c(11,6),unit = "cm") %>%  # column width 1 and 2
+  theme_zebra() %>% 
+  
+  # highlight problematic aspects
+  highlight(i = ~ content == "no", color = "#FFFF00", j = "content") %>%
+  color(i = ~ content == "no", color = "#FF0000", j = "content") %>%
+  bold(i = ~ content == "no",  j = "content") %>%
+  highlight(i = ~ content == "N/A", color = "#FFFF00", j = "content") %>%
+  color(i = ~ content == "N/A", color = "#FF0000", j = "content") %>%
+  bold(i = ~ content == "N/A",  j = "content") %>%
+  highlight(i = ~ content == "maybe", color = "#FFFF00", j = "content") %>%
+  color(i = ~ content == "maybe", color = "#FF0000", j = "content") %>%
+  bold(i = ~ content == "maybe",  j = "content") %>%
+  set_table_properties(layout = "fixed")
+
+# print table  
+ft
+```
+
+
+
+
+
+
+
+
+```{r citations, ft.align="left", eval= (params$empirical == "yes" & params$last_part_submitted == "Diversity")}
+# The following code is only executed if the submission presents empirical data and if the full manuscript was submitted (not Stage 1)
+asis_output("## Citation Standard\n") # Conditional section header
+
+asis_output("All data, programme code / scripts / syntax (e.g., from R, Stata, SPSS), materials, and other methods must be appropriately cited in the text and listed in the reference section. As such, these materials are recognized as original intellectual contributions and afforded recognition through citation.")
+
+citation_data <- tibble(
+  rubric = c(
+    "Are all data, program code and other methods appropriately cited within the text and listed in the reference section?",
+    "  If no, please explain why these things were not cited within the text and/or not listed in the reference section.",
+    "Are all data, code, and methods citations given unique, persistent IDs (e.g. DOI)?",
+    "  If no, please explain why these items weren't given unique, prersistent IDs (e.g., DOI)?"),
+  content = c(params$os_cited,
+              params$os_cited_explain,
+              params$os_doi,
+              params$os_doi_explain))
+
+
+ft <- flextable(citation_data) %>% 
+  italic(part = "all", j = 1) %>% 
+  fontsize(size = 10) %>% 
+  delete_part(part = "header") %>% 
+  border_remove() %>% 
+  width(width = c(11,6),unit = "cm") %>%
+  padding(j = 2, padding.left = 20,part = "all") %>% # move content from second column away from the left (to the right)
+  set_table_properties(layout = "fixed") %>% 
+  # highlight problematic aspects 
+  highlight(i = ~ content == "no", color = "#FFFF00", j = "content") %>% 
+  color(i = ~ content == "no", color = "#FF0000", j = "content") %>% 
+  bold(i = ~ content == "no",  j = "content") %>% 
+  theme_zebra()
+
+# print table
+ft
+```
+
+
+
+
+
+```{r diversity, ft.align="left", eval= (params$empirical == "yes" &params$last_part_submitted == "Diversity")}
+
+# The following code is only executed if the submission presents empirical data and if the full manuscript was submitted (not Stage 1)
+asis_output("## Diversity\n") # Conditional section header
+
+asis_output("GEP strongly encourages to justify and extensively describe the sample(s) of empirical work, to discuss the generalizability of the insights (culture/context), and strive for diversity when citing previous work. If authors don't follow these guidelines, they should explain why.")
+
+diversity_data <- tibble(
+  rubric = c(
+    "We provided a justification for the population we investigated",
+    "  Why not?",
+    "We provided an extensive sample description (e.g., study country, participants’ language)",
+    "  Why not?",
+    "We discussed the generalisability of our findings and implications in relation to culture and context",
+    "  Why not?",
+    "We strived for diversity when citing previous work (e.g., gender, underrepresented geographical areas)",
+    "  Why not?"),
+  
+  content = c(
+    params$div_sample_justification,
+    params$div_justification_explain,
+    params$div_sample_description,
+    params$div_description_explain,
+    params$div_discussion,
+    params$div_discussion_explain,
+    params$div_citations,
+    params$div_citations_explain)
+)
+
+
+ft <- flextable(diversity_data) %>% 
+  italic(part = "all", j = 1) %>% 
+  fontsize(size = 10) %>% 
+  delete_part(part = "header") %>% 
+  border_remove() %>% 
+  width(width = c(11,6),unit = "cm") %>%  # column width 1 and 2
+  padding(j = 2, padding.left = 20,part = "all") %>% # move content from second column away from the left (to the right)
+  set_table_properties(layout = "fixed") %>% 
+  
+  # highlight problematic aspects 
+  highlight(i = ~ content == "no", color = "#FFFF00", j = "content") %>% 
+  color(i = ~ content == "no", color = "#FF0000", j = "content") %>% 
+  bold(i = ~ content == "no",  j = "content") %>% 
+  theme_zebra() %>% 
+  # highlight problematic aspects 
+  highlight(i = ~ content == "N/A", color = "#FFFF00", j = "content") %>% 
+  color(i = ~ content == "N/A", color = "#FF0000", j = "content") %>% 
+  bold(i = ~ content == "N/A",  j = "content") %>% 
+  theme_zebra()
+
+# print table
+ft
+
+```
+
+
+
+```{r diversity2, ft.align="left", eval= (params$empirical == "no" & params$last_part_submitted == "Diversity")}
+
+# diversity table for non-empirical contributions (perspectives)
+
+asis_output("## Diversity\n") # Conditional section header
+
+asis_output("GEP strongly encourages to discuss the generalizability of the article's insights (e.g., culture or context) and to strive for diversity when citing previous work. If authors don't follow these guidelines, they should explain why.")
+
+diversity_data <- tibble(
+  rubric = c("We discussed the generalisability of our findings and implications in relation to culture and context",
+             "  Why not?",
+             "We strived for diversity when citing previous work (e.g., gender, underrepresented geographical areas)",
+             "  Why not?"),
+  
+  content = c(
+    params$div_discussion,
+    params$div_discussion_explain,
+    params$div_citations,
+    params$div_citations_explain)
+)
+
+
+ft <- flextable(diversity_data) %>% 
+  italic(part = "all", j = 1) %>% 
+  fontsize(size = 10) %>% 
+  delete_part(part = "header") %>% 
+  border_remove() %>% 
+  width(width = c(11,6),unit = "cm") %>%  
+  padding(j = 2, padding.left = 20,part = "all") %>% # move content from second column away from the left (to the right)
+  set_table_properties(layout = "fixed") %>% 
+  
+  # highlight problematic aspects 
+  highlight(i = ~ content == "no", color = "#FFFF00", j = "content") %>% 
+  color(i = ~ content == "no", color = "#FF0000", j = "content") %>% 
+  bold(i = ~ content == "no",  j = "content") %>% 
+  theme_zebra() %>% 
+  # highlight problematic aspects 
+  highlight(i = ~ content == "N/A", color = "#FFFF00", j = "content") %>% 
+  color(i = ~ content == "N/A", color = "#FF0000", j = "content") %>% 
+  bold(i = ~ content == "N/A",  j = "content") %>% 
+  theme_zebra()
+
+
+
+# print table
+ft
+
+```
