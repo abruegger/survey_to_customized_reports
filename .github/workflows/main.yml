@@ -1,0 +1,112 @@
+name: Download survey data and generate pdfs
+
+
+# tell github when to run code
+
+# next line would enable workflow initiation upon user request if comment / hashtag were removed
+#on: [workflow_dispatch]
+
+# this runs workflow on a defined schedule
+# time is utc, which means adding +2 gives Central European Time / +3 Central European Summer Time (CEST) 
+on: 
+  schedule: 
+# next line means “At 4:00.” (6 AM CET / 7 AM CEST)
+   - cron: '0 4 * * *'
+
+# A few more examples of possible schedules
+# next line means “At minute 0 past every 4th hour.” 
+#   - cron: '0 4 * * *'
+# next line means “At 11:00.” 
+#   - cron: '0 11 * * *'
+# next line means "At minute 0 past every 12th hour.”
+#   - cron: '0 12 * * *'
+# next line means “At 14:30.” 
+#   - cron: '30 14 * * *'
+# next line means “At 13:00” (plus 2hrs = 15h CET)
+#   - cron: '0 13 * * *'
+
+
+
+
+# Set up jobs / tell github what to do 
+
+jobs:
+  # This workflow contains a single job called "generate-data"
+  generate-data:
+    # The type of runner that the job will run on
+    runs-on: ${{ matrix.config.os }}
+    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {os: windows-latest,   r: '4.2.1'}
+    
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+        with:
+         token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: ${{ matrix.config.r }}
+          http-user-agent: ${{ matrix.config.http-user-agent }}
+          
+      - uses: r-lib/actions/setup-pandoc@v2
+      - uses: r-lib/actions/setup-tinytex@v2
+      
+          
+      - name: Setup renv
+        run: |
+          install.packages('renv')
+        shell: Rscript {0}
+      
+      - name: Setup formr
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}      
+        run: |
+          install.packages('devtools')
+          devtools::install_github("rubenarslan/formr@0.7.4", force = FALSE, upgrade = "never", auth_token = Sys.getenv("TOKEN"))
+        shell: Rscript {0}
+        
+        
+      - uses: actions/cache@v2
+        with:
+          path: ~/.local/share/renv
+          key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-renv-
+      - name: Install dependencies
+        run: |
+          renv::restore()
+        shell: Rscript {0}
+  
+      - name: Run Script 0
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          EMAIL: ${{ secrets.EMAIL }}
+          PASSWORD: ${{ secrets.PASSWORD}}
+        run: |
+          source("R/0_connect_git.R")
+        shell: Rscript {0}
+
+      - name: Run Script 1
+        run: |
+          source("R/1_import.R")
+        shell: Rscript {0}
+      
+      - name: Run Script 2
+        run: |
+          source("R/2_create_docs_git.R")
+        shell: Rscript {0}
+
+
+      - name: Commit files
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add .
+          git diff-index --quiet HEAD || (git commit -m "update data" && git push)
