@@ -4,14 +4,14 @@ name: Download survey data and generate pdfs
 # tell github when to run code
 
 # next line would enable workflow initiation upon user request if comment / hashtag were removed
-#on: [workflow_dispatch]
+on: [workflow_dispatch]
 
 # this runs workflow on a defined schedule
 # time is utc, which means adding +2 gives Central European Time / +3 Central European Summer Time (CEST) 
-on: 
-  schedule: 
+#on: 
+#  schedule: 
 # next line means “At 4:00.” (6 AM CET / 7 AM CEST)
-   - cron: '0 4 * * *'
+#   - cron: '0 4 * * *'
 
 # A few more examples of possible schedules
 # next line means “At minute 0 past every 4th hour.” 
