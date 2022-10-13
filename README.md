@@ -1,6 +1,6 @@
 # Automated creation of open science and diversity reports
 
-This repository is part of a <a href="https://www.adrianbruegger.com/post/" target="_blank">blogpost</a> that explains how GitHub can be used to automatically generate customised reports. The workflow is explained with respect to open science reports for the journal <a href="https://gep.psychopen.eu" target="_blank">Global Environmental Psychology</a>. These reports are used to verify and document authors' compliance with the journal's open science and diversity policies. Examples of test reports can be found <a href="https://github.com/abruegger/survey_to_customized_reports/tree/main/pdfs/open_science_peer_review" target="_blank">here</a>. 
+This repository is part of a <a href="https://www.adrianbruegger.com/post/using-github-to-create-customized-reports/" target="_blank">blogpost</a> that explains how GitHub can be used to automatically generate customised reports. The workflow is explained with respect to open science reports for the journal <a href="https://gep.psychopen.eu" target="_blank">Global Environmental Psychology</a>. These reports are used to verify and document authors' compliance with the journal's open science and diversity policies. Examples of test reports can be found <a href="https://github.com/abruegger/survey_to_customized_reports/tree/main/pdfs/open_science_peer_review" target="_blank">here</a>. 
 
 To protect sensitive data this repository doesn't contain any real data or passwords. Obviously the code will not run either. 
 
